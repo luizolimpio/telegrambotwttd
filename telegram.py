@@ -19,9 +19,9 @@ class KatchaYakisoba():
         msg = update.message.text
         user = update.message.from_user.first_name
 
-        type = self.type_msg(update.message.entities)
+        type_ = self.type_msg(update.message.entities)
 
-        if type == "url":
+        if type_ == "url":
             mensagem = "{} \n{}".format(msg, user)
 
             links_postados = open("links.txt", "r").read()
@@ -95,14 +95,14 @@ class KatchaYakisoba():
         # gracefully.
         updater.idle()
 
-    def type_msg(self, type):
-        for i in type:
-            type = i
+    def type_msg(self, type_):
+        for i in type_:
+            type_ = i
         try:
-            type = type["type"]
+            type_ = type_["type"]
         except:
             pass
-        return type
+        return type_
 
     def enviar_twitter(self, msg):
         from twython import Twython
