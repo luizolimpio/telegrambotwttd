@@ -9,7 +9,7 @@ logging.basicConfig(
 )
 
 
-class Katcha_Yakisoba():
+class KatchaYakisoba():
     logger = logging.getLogger(__name__)
 
     START, VALIDADOR_START = range(2)
@@ -56,7 +56,7 @@ class Katcha_Yakisoba():
         return self.VALIDADOR_START
 
     def cancel(self, bot, update):
-        user = update.message.from_user
+        update.message.from_user
         return ConversationHandler.END
 
     def error(self, bot, update, error):
@@ -107,19 +107,19 @@ class Katcha_Yakisoba():
     def enviar_twitter(self, msg):
         from twython import Twython
 
-        APP_KEY = "APP_KEY"
-        APP_SECRET = "APP_SECRET"
-        OAUTH_TOKEN = "OAUTH_TOKEN "
-        OAUTH_TOKEN_SECRET = "OAUTH_TOKEN_SECRET"
+        app_key = "APP_KEY"
+        app_secret = "APP_SECRET"
+        oauth_token = "OAUTH_TOKEN "
+        oauth_token_secret = "OAUTH_TOKEN_SECRET"
 
-        twitter = Twython(APP_KEY, APP_SECRET,
-                          OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+        twitter = Twython(app_key, app_secret,
+                          oauth_token, oauth_token_secret)
 
         twitter.update_status(status=msg)
 
 
 if __name__ == '__main__':
-    Katcha_Yakisoba()
+    KatchaYakisoba()
 
 """
 reply_keyboard = [['SANGRIA', 'FINANCEIRO']]
