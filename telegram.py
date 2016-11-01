@@ -1,6 +1,9 @@
+import hashlib
+import os
+import logging
+
 from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, Updater)
-import logging
 
 
 logging.basicConfig(
@@ -13,33 +16,28 @@ class KatchaYakisoba():
     logger = logging.getLogger(__name__)
 
     START, VALIDADOR_START = range(2)
+    LINKS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'links')
 
     def validador_start(self, bot, update):
 
         msg = update.message.text
         user = update.message.from_user.first_name
-
         type_ = self.type_msg(update.message.entities)
 
         if type_ == "url":
             mensagem = "{} \n{}".format(msg, user)
-
-            links_postados = open("links.txt", "r").read()
-            links_postados = links_postados.split()
             twitter = "https://twitter.com/KatchaYakisoba"
+            hash = hashlib.md5(msg.encode())
 
-            for verificar_site in links_postados:
-                if msg == verificar_site:
-                    text = "Link ja foi postado, consulte em " + twitter
-                    bot.sendMessage(update.message.chat_id,
-                                    text=text,
-                                    one_time_keyboard=True)
-                    return self.cancel(bot, update)
+            # abort if link was already posted
+            if self.link_exists(hash):
+                text = "Link ja foi postado, consulte em " + twitter
+                bot.sendMessage(update.message.chat_id,
+                                text=text,
+                                one_time_keyboard=True)
+                return self.cancel(bot, update)
 
-            links_postados.append(msg)
-            links_postados = " ".join(links_postados)
-            salvar_links_postados_handler = open("links.txt", "w")
-            salvar_links_postados_handler.write(links_postados)
+            self.create_link_file(hash)
             self.enviar_twitter(mensagem)
 
             text = "Link salvo com sucesso, consulte em " + twitter
@@ -48,6 +46,29 @@ class KatchaYakisoba():
                             one_time_keyboard=True)
 
             return self.cancel(bot, update)
+
+    def link_file(self, hash):
+        """Gets URL (str) or hash obj. and return the path to the file."""
+        if isinstance(str, hash):
+            hash = hashlib.md5(hash.encode())
+        return os.path.join(self.LINKS, hash.hexdigest())
+
+    def link_exists(self, hash):
+        """Gets URL (str) or hash obj. and return a boolean."""
+        if isinstance(str, hash):
+            hash = hashlib.md5(hash.encode())
+        return os.path.exists(self.link_file(hash))
+
+    def create_link_file(self, hash):
+        """Gets URL (str) or hash obj. and creates a file (returns boolean)."""
+        if isinstance(str, hash):
+            hash = hashlib.md5(hash.encode())
+
+        if not self.link_exists(hash):
+            open(self.link_file(hash), 'a').close()
+            return True
+
+        return False
 
     def start(self, bot, update):
         bot.sendMessage(update.message.chat_id,
@@ -63,6 +84,16 @@ class KatchaYakisoba():
         self.logger.warn('Update "%s" caused error "%s"' % (update, error))
 
     def __init__(self):
+
+        # create directory to store link files
+        if not os.path.exists(self.LINKS):
+            os.makedirs(self.LINKS)
+
+        # Backward compatibility with links.txt
+        if os.path.exists('links.txt'):
+            for link in open('links.txt', 'r').read().split():
+                self.create_link_file(link)
+
         # Create the EventHandler and pass it your bot's token.
         updater = Updater("codigodobot")
 
