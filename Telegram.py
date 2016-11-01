@@ -74,7 +74,7 @@ class Katcha_Yakisoba():
 
     def __init__(self):
         # Create the EventHandler and pass it your bot's token.
-        updater = Updater("287668784:AAFPp2I7wvdXro8sDg9isbPh5BX3T2hYZUM")
+        updater = Updater("codigodobot")
 
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
