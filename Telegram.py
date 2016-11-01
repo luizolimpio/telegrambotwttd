@@ -117,10 +117,10 @@ class Katcha_Yakisoba():
     def enviar_twitter(self,msg):
         from twython import Twython
 
-        APP_KEY = "1qvxVT8lKGQrACooOFXHtsPor"
-        APP_SECRET = "Sdtf14jvpILDnyJF7RoKoekjYS9YANQ8UwM167aIiR2oggBA9C"
-        OAUTH_TOKEN = "788791031596711936-hdWpxAjanoVQLsBLFXaZ9gz6bQYHFRK"
-        OAUTH_TOKEN_SECRET = "AGe22BS9w83sOfIJXTRYyHey8jGkbAxQargiLsignbOUb"
+        APP_KEY = "APP_KEY"
+        APP_SECRET = "APP_SECRET"
+        OAUTH_TOKEN = "OAUTH_TOKEN "
+        OAUTH_TOKEN_SECRET = "OAUTH_TOKEN_SECRET"
 
         twitter = Twython(APP_KEY, APP_SECRET,
                           OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
